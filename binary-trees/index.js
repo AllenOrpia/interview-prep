@@ -132,7 +132,7 @@ const treeSum = (root, sum = 0) => {
     sum += treeSum(root.left, sum);
     sum += treeSum(root.right, sum);
 
-    return root.val + sum
+    return root.val + sum;
 };
 
 const treeSum2 = (root) => {
@@ -142,4 +142,46 @@ const treeSum2 = (root) => {
     let right = treeSum(root.right);
 
     return root.val + left + right;
+};
+
+const treeSum3 = (root,target) => {
+    if (!root) return 0;
+
+    return root.value + treeSum3(root.left) + treeSum3(root.right)
+};
+
+
+const treeMinValue = (root) => {
+    if (!root) return Infinity;
+
+    let left = treeMinValue(root.left);
+    let right = treeMinValue(root.right);
+
+    return Math.min(root.value, left, right)
+
+};
+
+
+const treeMinValue2 = (root) => {
+    const stack = [ root ];
+    let min = Infinity;
+
+    while (stack.lenght > 0) {
+        const currentNode = stack.pop();
+        min = Math.min(min, currentNode.value);
+        if (currentNode.right) stack.push(currentNode.right);
+        if (currentNode.left) stack.push(currentNode.left);
+    };
+
+    return min;
+};
+
+
+const maxRootToLeafPathSum = (root) => {
+    if (!root) return -Infinity
+    if (!root.left && !root.right) return root.val;
+    const left = maxRootToLeafPathSum(root.left);
+    const right = maxRootToLeafPathSum(root.right);
+
+    return Math.max(left, right) + root.val;
 }
