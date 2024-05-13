@@ -140,3 +140,82 @@ const explore = (graph, source, visited) => {
 
     return true
 }
+
+
+const largestComponent = (graph) => {
+    let largest = 0;
+    for (let node in graph) {
+       largest = Math.max(largest,explore2(graph, node, new Set() ) )
+    }
+
+    return largest;
+}
+
+
+const explore2 = (graph, current, visited) => {
+    if (visited.has(String(current))) return 0;
+    visited.add(String(current))
+    let count = 1;
+
+    for ( let neighbor of graph[current]) {
+        count += explore(graph, neighbor, visited)
+    };
+
+    return count;
+}
+
+
+const shortestPath = (source, target, graph) => {
+    const queue = [ source ];
+    const visited = new Set();
+    let count = 0;
+
+    while (queue.length > 0) {
+        const currentNode = queue.shift();
+        if (visited.has(String(currentNode))) continue;
+        visited.add(String(currentNode));
+
+        for (let neighbor of graph[currentNode]) {
+            if (neighbor === target) return count;
+        }
+
+        count++
+    }
+
+    return null
+}
+
+
+const islandCount = (grid) => {
+    const visited = new Set();
+    let count = 0;
+    for (let r = 0; r < grid.length; r ++) {
+        for ( let c = 0; c < grid[0].length; c ++) {
+            if (explore(grid, r, c, visited) === true) count++
+        }
+    }
+
+    return count;
+}
+
+const exploreIsland = (grid, r, c, visited) => {
+    const rowInbounds = 0 <= r && r < grid.length;
+    const colInbounds = 0 <= c && c < grid[0].length;
+
+    if (!rowInbounds && !colInbounds) return false;
+
+    if (grid[r,c] === 'W') return false;
+    
+    const pos = r + ',' + c;
+    if (visited.has(pos)) return false;
+    visited.add(pos);
+
+    exploreIsland(grid, r - 1, c, visited)
+    exploreIsland(grid, r + 1, c, visited)
+    exploreIsland(grid, r, c - 1, visited)
+    exploreIsland(grid, r, c + 1, visited)
+
+
+    return true;
+
+}
