@@ -218,4 +218,40 @@ const exploreIsland = (grid, r, c, visited) => {
 
     return true;
 
+};
+
+
+const minIsland = (graph) => {
+    let min = Infinity;
+    const visited = new Set();
+    for(let r = 0; r < graph.length; r++) {
+        for (let c = 0; c < graph[0].length; c++) {
+            min = Math.min(min,exploreIsland2(graph, r, c, visited));
+        }
+    }
+
+    return min;
+};
+
+const exploreIsland2 = (graph, r , c, visited) => {
+    const rowInbounds = 0 <= r && r < grid.length;
+    const colInbounds = 0 <= c && c < grid[0].length;
+
+    if (!rowInbounds && !colInbounds) return 0;
+    if (grid[r,c] === 'W') return 0;
+    
+    const pos = r + ',' + c;
+    if (visited.has(pos)) return 0;
+    visited.add(pos);
+
+    let size = 1;
+
+    size += exploreIsland2(graph, r - 1, c, visited)
+    size += exploreIsland2(graph, r + 1, c, visited)
+    size += exploreIsland2(graph, r, c - 1, visited)
+    size += exploreIsland2(graph, r, c + 1, visited)
+
+    return size;
+
+
 }
