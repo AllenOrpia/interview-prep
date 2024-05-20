@@ -4,6 +4,19 @@
         ? Memoization
             keys will be arguments to function, value will be the return value
 
+            ! Memoization Recipe
+                1. Make it work.
+                    - Visualize the problem as a tree
+                    - Implement the tree using recursion
+                    - Test it
+
+
+                2. Make it efficient.
+                    - add a memo object
+                    - add a base case to return memo values
+                    - store return values into the memo
+
+
 
         ? Tabulation
 
@@ -40,4 +53,41 @@ const gridTraveler = (m , n, memo = {}) => {
     memo[pos2] = memo[pos1];
 
     return memo[pos1];
+};
+
+
+const canSum = (targetSum, numbers, memo = {}) => {
+    if (targetSum in memo) return memo[targetSum];
+    if (targetSum === 0) return true;
+    if (targetSum < 0) return false;
+
+
+    for (let num of numbers) {
+        const remainder = targetSum - num;
+        if (canSum(remainder, numbers, memo) === true) {
+            memo[targetSum] = true;
+            return true;
+        };
+    }
+
+    return false;
+};
+
+
+const howSum = (targetSum, numbers, memo = {}) => {
+    if (targetSum in memo) return memo[targetSum];
+    if (targetSum === 0) return [];
+    if (targetSum < 0) return null;
+
+    for (let num of numbers) {
+        const remainder = targetSum - num;
+        const res = howSum(remainder, numbers, memo)
+        if (!res) {
+            memo[targetSum] = [...res, num]
+            return [...res, num]
+        }
+    }
+
+    memo[targetSum] = null;
+    return null;
 }
