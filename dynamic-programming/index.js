@@ -62,7 +62,9 @@ const gridTraveler = (m , n, memo = {}) => {
     targetSum using numbers from the array
 
 
-    ! Time Complexity - O(n * m)
+    ! Time Complexity - O(n ^ m )
+        Improved time Complexity with memo
+            O (m * n)
     ! Space Complexity - O(m)
 
 */
@@ -86,3 +88,36 @@ const canSum = (target, numbers, memo = {}) => {
     memo[target] = false;
     return memo[target];
 }
+
+
+/*
+    Write a function howSum that takes in a targetSum and an array of numbers as args
+
+    The function should return an array containing any combination of elements that add up to exactly the targetSum. If there is no combination that adds up to the targetSum, then return null.
+
+    You may return any single combination
+
+*/
+
+
+
+const howSum = (target, numbers, memo = {}) => {
+    if (target in memo) return memo[target];
+    if (target < 0 ) return null;
+    if (target  === 0) return [];
+
+    for (let num of numbers) {
+        const remainder = target - num;
+        const res = howSum(remainder, numbers);
+
+        if (res !== null) {
+            const combination = [...res, num];
+            memo[target] = combination;
+            return memo[target];
+        }
+    }
+
+    memo[target] = null;
+    return memo[target];
+}
+
