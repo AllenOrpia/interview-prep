@@ -97,6 +97,10 @@ const canSum = (target, numbers, memo = {}) => {
 
     You may return any single combination
 
+
+    ! Time Com - O(n^m * m)
+        Improve Time Com with memo - O(n * m *m) => O(n * m^2)
+    ! Space Com - O(m)
 */
 
 
