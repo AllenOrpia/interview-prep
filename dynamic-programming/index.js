@@ -200,3 +200,91 @@ const canConstruct = (wordBank, target, memo = {}) => {
 
     return memo[target];
 }
+
+
+/*
+
+Write a function that accepts a target string and an array of strings
+
+The function should return the number of ways that the target can be constructed by concatenating elements
+of the wordBank arry
+
+You may reuse elements of the wordbank as many times as needed
+
+    ! Time Complexity 
+        brute force -> O(n^m * m)
+        memoized -> O(n * m^2)
+    ! Space Complexity 
+        brute force -> O(m^2)
+        memoized -> O(m^2)
+
+*/
+
+const countConstruct = (wordBank, target, memo = {}) => {
+    if (target in memo) return memo[target]
+    if (target === '' ) return 1;
+    let count = 0;
+
+    for (let word of wordBank) {
+
+        // Check if the word is a prefix
+        if (target.indexOf(word) === 0) {
+            // Obtain the suffix, the string without of the target minus the prefix
+            // Slice means everything after the word/length
+            const suffix = target.slice(word.length);
+
+            count += countConstruct(wordBank, suffix, memo);
+        }
+    }
+
+    memo[target] = count;
+    return memo[target]
+}
+
+
+
+/*
+
+Write a function that accepts a target string and an array of strings
+
+The function should return a 2D array containing all of the ways that the target can be constructed by concatenating elements of the wordBank array. Each element of the 2D array should represent one combination that constructs the target
+
+
+You may reuse elements as many times as needed
+
+    ! Time complexity
+        brute force - O(n ^ m )
+        memoized -  O(m)
+    ! Space complexity
+        brute force - O(n^m)
+        memoized -  O(m)
+*/      
+
+
+const allConstruct = (wordBank, target, memo = {}) => {
+    if (target in memo) return memo[target];
+    if (target === '') return [[]];
+
+    const res = [];
+
+    for (let word of wordBank) {
+
+        // Check if the word is a prefix
+        if (target.indexOf(word) === 0) {
+            
+            // Get the suffix, string of target without the prefix
+            const suffix = target.slice(word.length);
+            // Obtain all the possible ways of constructing the suffix
+            const suffixWays = allConstruct(wordBank, suffix);
+
+            // Obtain all the ways of obtaining the target and add the current word/edge to each possible combination
+            const targetWays = suffixWays.map( (way) => [ word, ...way] )
+
+            res.push(...targetWays);
+            
+        }
+    }
+
+    memo[target] = res;
+    return res;
+}
