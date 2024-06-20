@@ -101,6 +101,7 @@ const canSum = (target, numbers, memo = {}) => {
     ! Time Com - O(n^m * m)
         Improve Time Com with memo - O(n * m *m) => O(n * m^2)
     ! Space Com - O(m)
+        memoized space 0(m^2)
 */
 
 
@@ -125,3 +126,77 @@ const howSum = (target, numbers, memo = {}) => {
     return memo[target];
 }
 
+
+/*
+    Write a function that takes in a target and an array of numbers as args
+
+    The function should return an array containing the shortest combination of numbers that add up to exactly the target
+
+    if there is any tie for the shortest combination, you may return any one of the shortest
+
+
+    ! Time Complexity - O(m^2 * n)
+    ! Space Complexity - O(m^2)
+
+*/
+
+const bestSum = (target, numbers) => {
+    if (target === 0) return [];
+    if (target < 0) return null;
+
+    let min = null;
+
+    for (let num of numbers) {
+        const remainder = target - num;
+        const res = bestSum(remainder, numbers, memo);
+
+        if (res !== null) {
+            const combination = [...res, num]
+
+            if (min === null || combination.length < min.length) min = combination
+        }
+    }
+
+
+    memo[target] = min;
+    return min
+}
+
+
+/*
+    Write a function that accepts a target string and an array of strings
+
+    The function should return a boolean indicating whether or not the target can be constructed by concatenating elements of the wordBank array
+
+    You may reuse elements of the wordBank as many times as needed
+
+    ! To approach this problem, we only branch out if we do have a prefix
+
+    ! Time Complexity - O(n^m * m)
+        - Memoized Time Complexity - O(n * m^2)
+    ! Space Complexity - O(m * m)
+        - Memoized Space - O(m^2)
+
+*/
+
+
+const canConstruct = (wordBank, target, memo = {}) => {
+    if (target in memo) return memo[target];
+    if (target === '' ) return true;
+
+    for (let word of wordBank) {
+        // This indicates if the word starts at 0 of the target, in other words if it is a prefix
+        if (target.indexOf(word) === 0) {
+            // Obtain the string starting after the word
+            const suffix = target.slice(word.length);
+            if (canConstruct(wordBank, target, memo) === true) {
+                memo[target] = true;
+                return memo[target];
+            }
+        }
+    }
+
+    memo[target] = false;
+
+    return memo[target];
+}
