@@ -21,6 +21,15 @@
             - Store return values into the memo
 
 
+    * Tabulation Recipe
+        
+            Visualize the problem as a table
+            Size the table based on the inputs
+            initialize the table with default values
+            seed the trivial answer into the table
+            iterate through the table
+            fill further positions based on the current position
+
 
 
 */
@@ -287,4 +296,110 @@ const allConstruct = (wordBank, target, memo = {}) => {
 
     memo[target] = res;
     return res;
+}
+
+
+/* ------------------------------------------------------------------------
+
+    ? FIBULATION SERIES
+*/
+
+
+/*
+    Write a function that takes in a number as an argument. The function should return the n-th number of the 
+    fibonacci sequence
+
+
+    The 0th number of the sequence is 0
+    The 1st number of the sequence is 1
+
+    to generate the next number of the sequence, we can sum the previous two
+
+
+*/
+
+
+const fibTabulation = (n) => {
+    const table = new Array(n + 1).fill(0);
+    table[1] = 1;
+
+    for (let i = 0; i <= n; i++) {
+        table[i + 1] += table[i];
+        table[i + 2] += table[i];
+    }
+
+    return table[n];
+}
+
+
+const gridTravelerTabulation = (m , n) => {
+    const table = new Array(m + 1).fill().map( () => new Array(n + 1).fill(0))
+    table[1][1] = 1;
+
+    for (let row = 0; row <= m; row++) {
+        for (let col = 0; col <= n; col++) {
+            const current = table[row][col];
+            if (row + 1 <= m) table[row + 1][col] += current;
+            if (col + 1 <= n) table[row][col + 1] += current;
+        }
+    }
+
+    return table[m][n]
+
+}
+
+
+const canSumTabulation = (target, numbers) => {
+    const table = new Array(target + 1).fill(false);
+    table[0] = true;
+
+    for (let i = 0; i <= target; i++) {
+        if (table[i] === true) {
+            for (let num of numbers) {
+                if (i + num <= target) table[i + num] = table[i];
+            }
+        }
+    }
+
+    return table[target];
+}
+
+
+const howSumTabulation = (target, numbers) => {
+    const table = new Array(target + 1).fill(null);
+
+    table[0] = [];
+
+    for (let i = 0; i <= target; i++) {
+        if (table[i] !== null) {
+            for (let num of numbers) {
+                if (i + num <= target) table[i + num] = [...table[i], num];
+                
+            }
+        }
+    }
+
+    return table[target];
+}
+
+
+const bestSumTabulation = (target, numbers) => {
+    const table = new Array(target + 1).fill(null);
+
+    table[0] = null;
+
+    for (let i = 0; i <= target; i++) {
+        if (table[i] !== null) {
+            for (let num of numbers) {
+                const combination = [ ...table[i], num];
+                if (table[i + num] === null) {
+                    table[i + num] = combination;
+                } else {
+                    if (combination.length < table[i + num].length) table[i + num] = combination;
+                }
+            } 
+        }
+    }
+
+    return table[target];
 }
