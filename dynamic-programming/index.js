@@ -403,3 +403,60 @@ const bestSumTabulation = (target, numbers) => {
 
     return table[target];
 }
+
+
+const canConstructTabulation = (target, wordBank) => {
+    const table = new Array(target.length + 1).fill(false);
+    table[0] = true;
+
+    for (let i = 0; i < target.length; i++) {
+        if (table[i] === true) {
+            for (let word of wordBank) {
+                // Check if the string matches the characters at the starting position
+
+                if (target.slice(i, i + word.length) === word) {
+                    table[i + word.length] = true
+                }
+            }
+        }
+    }
+
+    return table[target]
+
+}
+
+
+const countConstructTabulation = (target, wordBank) => {
+    const table = new Array(target.length + 1).fill(0);
+    table[0] = 1;
+
+    for (let i = 0; i < target.length; i++) {
+        for (let word of wordBank) {
+            if (target.slice(i, i + word) === word) table[i+ word.length] += table[i]
+        }
+    }
+
+    return table[target]
+}
+
+
+const allConstructTabulation = (target, wordBank) => {
+    const table = new Array(target.length + 1).fill().map( () => []);
+    table[0] = [[]];
+
+    for (let i = 0; i < target; i++) {
+        
+            for (let word of wordBank) {
+                if (target.slice(i, i + word.length) === word) {
+                    const combinations = table[i].map( (combo) => [...combo, word]);
+                    table[i + word.length].push(...combinations) 
+
+                }
+                
+            }
+        
+    }
+
+
+    return table[target.length]
+}
