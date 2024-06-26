@@ -52,3 +52,67 @@ const isSame = (p, q) => {
     return left && right;
 
 }
+
+
+// ? Invert Binary Tree - Given the root of a binary tree, invert the tree and return its root
+
+/*
+    * Classic dfs approach
+    * At every subroot I invert the values of the left and right branches
+
+*/
+
+
+const invertTree = (root) => {
+    // Base cases
+    if (!root) return null;
+
+    // Recursive case
+    // For every branch we change the values to the inverted branch
+    [root.left, root.right] = [invertTree(root.right), invertTree(root.left)
+    ]
+
+    // Return the root
+    return root
+}
+
+
+// ? Subtree of another tree - Given the roots of two binary trees root and subRoot, return true if there is a subtree of root with the same structure and node values of subRoot and false otherwise
+
+/*
+    * classic dfs approach
+    * traverse down the root tree and for every subroot compare and check if they are equal'
+    * if they are we can do an early return true
+    * We would need a second helper function that would check for comparisons
+
+*/
+
+
+const isSubtree = (root, subRoot) => {
+
+    const isSame = (node1, node) => {
+        if (!node1 && !node2) return true;
+        if (!node1 || !node || node1.val !== node2.val) return false;
+
+        if (node1.val === node2.val) {
+            return isSame(node1.left, node2.left) && isSame(node1.right, node2.right);
+        }
+
+        return false;
+    }
+    
+
+    const dfs = (node) => {
+        // Base case
+      if (!node) return false;
+
+        // Early return case, if we find one true we just return
+      if (isSame(node, subRoot) === true) return true;
+
+    //   recursive case
+    return dfs(node.left, subRoot) || dfs(node.right, subRoot)
+
+    }
+
+   return  dfs(root)
+}
