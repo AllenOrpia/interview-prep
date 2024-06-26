@@ -116,3 +116,50 @@ const isSubtree = (root, subRoot) => {
 
    return  dfs(root)
 }
+
+
+
+// ? Binary Tree Level Order Traversal - Given the root of a binary tree, return the level order traversal of its node's values, (i.e from left to right, level by level)
+
+const levelOrder = (root) => {
+    const q = [ root ];
+    const res = [];
+
+    while ( q.length > 0) {
+        const len = q.length;
+        const level = [];
+
+        for (let i = 0; i < len; i++) {
+            const current = q.shift();
+            level.push(current.val);
+
+            if (current.left) q.push(current.left);
+            if (current.right) q.push(current.right);
+
+        }
+
+        if (level.length > 0) res.push([...level]);
+    }
+
+    return res;
+}
+
+
+const isValidBST = (root) => {
+
+    const dfs = (node, left, right) => {
+        if (!root) return true;
+        if ( (root.val < right && root.val > left) === false) return false;
+
+        // Left range - -Infinity to root.val
+        //  right range - root.val to Infinity
+        const left = dfs(root.left, left, root.val);
+        const right = dfs(root.right, root.val, right);
+
+        return left && right;
+    }
+
+    return dfs(root, -Infinity, Infinity);
+}
+
+
