@@ -163,3 +163,39 @@ const isValidBST = (root) => {
 }
 
 
+// ? Kth Smallest Element in a BST - Given the root of a BST, and an integer k, return the kth smallest value (1-indexed) of all the values of the nodes in the tree
+
+/*
+    ! BST's are organized in a way that the left most is the smallest and goes in ascending order from left - root - right
+
+    * I can use an inOrder DFS approach and go to the very left branch then right
+    * I keep a counter and once counter = k we return the current node value
+
+
+*/
+
+const kthSmallest = (root, k) => {
+    // Since it is 1 indexed we start at 1
+    let counter = 1;
+    const result = null;
+
+    const dfs = (node) => {
+            // Base case if we hit a null node we are at the very bottom and we return
+            if (!node) return null;
+
+            // traverse to the very left
+            dfs(node.left);
+            if (counter === k) result = node.val;
+            counter++
+            
+            // traverse to the very right
+            dfs(node.right)
+
+            return;
+    }
+
+    dfs(root);
+
+    return result;
+
+}
